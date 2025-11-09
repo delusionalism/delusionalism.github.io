@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Content Paste</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load marked.js library for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/lib/marked.umd.min.js"></script>
+    
+    <!-- Configure Tailwind to use a Monospace font globally, which is key to the rentry look -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
+                    },
+                    colors: {
+                        'page-bg': '#f7f7f7', // Light beige/off-white background
+                        'content-bg': '#ffffff', // Pure white for the main block
+                        'text-default': '#333333', // Dark grey text
+                        'link-blue': '#0070c0', // A standard web blue for links
+                    }
+                }
+            }
+        }
+
+        // --- JavaScript for Markdown Parsing ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const contentDiv = document.getElementById('markdown-content');
+            if (contentDiv) {
+                const rawMarkdown = contentDiv.textContent.trim();
+
+                // Create a custom renderer to apply Tailwind styles to Markdown output
+                const renderer = new marked.Renderer();
+
+                // Apply Tailwind classes to tables for better aesthetics
+                renderer.table = (header, body) => {
+                    return `
+                        <div class="overflow-x-auto my-4">
+                            <table class="w-full text-sm border-2 border-gray-300 rounded-lg overflow-hidden">
+                                <thead class="bg-gray-100 text-text-default border-b-2 border-gray-300">
+                                    ${header}
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    ${body}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                };
+                // Apply monospace and padding to table cells
+                renderer.tablecell = (content, flags) => {
+                    const tag = flags.header ? 'th' : 'td';
+                    const alignment = flags.align ? `text-${flags.align}` : 'text-left';
+                    return `<${tag} class="py-2 px-4 font-mono ${alignment}">${content}</${tag}>`;
+                };
+
+                // Apply styles to headings
+                renderer.heading = (text, level) => {
+                    const classes = {
+                        1: 'text-2xl font-bold mt-6 mb-3 border-b border-gray-300 pb-1',
+                        2: 'text-xl font-bold mt-5 mb-2',
+                        3: 'text-lg font-semibold mt-4 mb-2',
+                    }[level];
+                    return `<h${level} class="${classes} text-text-default">${text}</h${level}>`;
+                };
+                
+                // Apply styles to blockquotes
+                renderer.blockquote = (quote) => {
+                    return `<blockquote class="pl-4 border-l-4 border-link-blue text-gray-500 italic my-4">${quote}</blockquote>`;
+                };
+
+                // Configure marked.js
+                marked.setOptions({
+                    renderer: renderer,
+                    gfm: true,
+                    breaks: true, // Allow hard line breaks
+                });
+
+                // Convert and inject
+                const htmlContent = marked.parse(rawMarkdown);
+                contentDiv.innerHTML = htmlContent;
+            }
+        });
+    </script>
+    <style>
+        /* Apply the monospace font to the entire body */
+        body {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background-color: theme('colors.page-bg');
+            color: theme('colors.text-default');
+            min-height: 100vh; /* Ensure full page height */
+        }
+        /* Custom scrollbar to match the minimalist aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background-color: #f0f0f0;
+        }
+        /* Ensure specific dark sections use full line height */
+        .dark-row > div {
+            line-height: 1.5;
+        }
+        /* Style for Markdown lists to match the simple aesthetic */
+        ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 flex justify-center">
+
+    <!-- Main Content Container: Fixed max-width and centered -->
+    <div class="w-full max-w-4xl">
+
+        <!-- Header/Logo Area -->
+        <header class="mb-4 flex justify-between items-center text-sm">
+            <h1 class="font-bold text-xl tracking-wider text-text-default">
+                PASTE.ME
+            </h1>
+            <nav>
+                <a href="#" class="text-link-blue hover:underline">New Paste</a>
+                <span class="text-gray-400 mx-2">|</span>
+                <a href="#" class="text-link-blue hover:underline">Login</a>
+            </nav>
+        </header>
+
+        <!-- Main Content Block (The Paste) -->
+        <main class="shadow-xl rounded-lg border border-gray-200">
+            <div class="bg-content-bg p-6 sm:p-8 overflow-auto max-h-[85vh] text-base leading-relaxed font-mono">
+
+                <!-- Dark Socials/Games Section -->
+                <div class="mb-8 border border-gray-700 rounded-lg overflow-hidden text-sm">
+                    <!-- Header Row -->
+                    <div class="grid grid-cols-2 bg-gray-800 text-white font-bold text-center border-b border-gray-700">
+                        <div class="py-2 px-4">Socials</div>
+                        <div class="py-2 px-4 border-l border-gray-700">Games</div>
+                    </div>
+
+                    <!-- Content Rows -->
+                    <div class="divide-y divide-gray-700 bg-gray-700 text-gray-200">
+                        <!-- Row 1 -->
+                        <div class="grid grid-cols-2 dark-row">
+                            <div class="py-2 px-4 border-r border-gray-700 flex justify-between">
+                                <span class="font-bold text-white">Discord:</span>
+                                <a href="#" class="text-pink-300 hover:underline">syko.ne</a>
+                            </div>
+                            <div class="py-2 px-4 flex justify-between">
+                                <span class="font-bold text-white">GBF:</span>
+                                <span>'16638355'</span>
+                            </div>
+                        </div>
+                        <!-- Row 2 -->
+                        <div class="grid grid-cols-2 dark-row">
+                            <div class="py-2 px-4 border-r border-gray-700 flex justify-between">
+                                <span class="font-bold text-white">Lastfm:</span>
+                                <a href="#" class="text-pink-300 hover:underline">W4suu</a>
+                            </div>
+                            <div class="py-2 px-4 flex justify-between">
+                                <span class="font-bold text-white">BDO Asia:</span>
+                                <span>'Syko'</span>
+                            </div>
+                        </div>
+                        <!-- Row 3 -->
+                        <div class="grid grid-cols-2 dark-row">
+                            <div class="py-2 px-4 border-r border-gray-700 flex justify-between">
+                                <span class="font-bold text-white">Signal:</span>
+                                <a href="#" class="text-pink-300 hover:underline">delusionalism.69</a>
+                            </div>
+                            <div class="py-2 px-4 flex justify-between">
+                                <span class="font-bold text-white">UMA:</span>
+                                <span>839673336719</span>
+                            </div>
+                        </div>
+                        <!-- Row 4 -->
+                        <div class="grid grid-cols-2 dark-row">
+                            <div class="py-2 px-4 border-r border-gray-700 flex justify-between">
+                                <span class="font-bold text-white">Line:</span>
+                                <a href="#" class="text-pink-300 hover:underline">delusionalism</a>
+                            </div>
+                            <div class="py-2 px-4 flex justify-between">
+                                <span class="font-bold text-white">UMA:</span>
+                                <span>413727159</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Markdown Content Area: The raw text below will be replaced by the JS script -->
+                <div id="markdown-content" class="text-text-default leading-relaxed">
+# Markdown Test Paste
+
+This area now supports **Markdown** syntax, which is converted to structured HTML on load.
+
+The key features are:
+
+1.  **Readability:** The text remains highly readable thanks to the monospaced font.
+2.  **Code Blocks:** Code is preserved in blocks.
+
+```javascript
+function greet(name) {
+  // This is a code block
+  console.log(`Hello, ${name}!`);
+}
+greet('World');
+```
+
+## Supported Elements
+
+| Feature | Syntax | Output |
+| :--- | :--- | :--- |
+| **Bold Text** | `**text**` | Rendered HTML |
+| *Italic Text* | `*text*` | Rendered HTML |
+| [Links](https://example.com) | `[Text](URL)` | Styled Link |
+
+> This is a blockquote, often used for emphasis or citations.
+
+### Sample List
+
+* Item one is a list item.
+* Item two is another.
+    * Sub-item A
+    * Sub-item B
+* Item three completes the list.
+
+---
+### Conclusion
+
+The page now handles both the complex static card above and dynamic content formatted using Markdown!
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Area -->
+        <footer class="mt-4 text-center text-xs text-gray-500">
+            &copy; 2025 PASTE.ME Clone. Built with Tailwind CSS and marked.js.
+        </footer>
+
+    </div>
+
+</body>
+</html>
