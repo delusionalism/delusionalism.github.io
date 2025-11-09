@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Syko" />
+    <meta property="og:description" content="Call me deodorant the way i be in her armpits" />
+    <title>Syko</title>
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+        }
+
+        #progress-bar, #volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: #4b5563;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        #progress-bar::-webkit-slider-thumb, #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #f87171;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        #progress-bar::-moz-range-thumb, #volume-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            background: #f87171;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        #progress-bar::-moz-range-track, #volume-slider::-moz-range-track {
+            background: #4b5563;
+            border-radius: 3px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-body': '#0a0a0a',
+                        'dark-surface': '#262626',
+                        'dark-header': '#333333',
+                        'accent-link': '#f87171',
+                        'pink-header': '#e7467c',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-body">
+
+    <div id="player-container" class="fixed top-4 left-4 z-50">
+        
+        <button id="minimize-button" class="px-4 py-3 text-xl rounded-full bg-accent-link text-white shadow-xl hover:bg-red-600 transition duration-200">
+            :3
+        </button>
+
+        <div id="audio-controls-box" class="hidden w-80 p-4 rounded-xl bg-dark-surface shadow-2xl border border-neutral-700">
+            
+            <div class="flex justify-end mb-2">
+                <button id="close-button" class="p-1 text-neutral-400 hover:text-white transition">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="text-center text-neutral-300 text-sm font-semibold truncate mb-3" id="track-title">
+                Loading Playlist...
+            </div>
+            
+            <div class="flex items-center justify-between text-neutral-400 text-xs mb-2">
+                <span id="current-time">00:00</span>
+                <span id="total-duration">00:00</span>
+            </div>
+            <input type="range" id="progress-bar" value="0" min="0" max="100" class="w-full h-1 appearance-none cursor-pointer mb-4">
+
+            <div class="flex justify-between items-center px-2">
+                
+                <div class="flex items-center space-x-2">
+
+                    <button id="previous-track-button" class="p-2 text-neutral-400 hover:text-accent-link transition">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+                    
+                    <button id="play-pause-button" class="p-2 text-neutral-400 hover:text-accent-link transition">
+                        <svg id="icon-pause" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>
+                        <svg id="icon-play" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.625v12.75a.75.75 0 0 0 1.25.56l11.75-6.375a.75.75 0 0 0 0-1.372L6.5 5.065a.75.75 0 0 0-1.25.56Z" /></svg>
+                    </button>
+
+                    <button id="next-track-button" class="p-2 text-neutral-400 hover:text-accent-link transition">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+                    
+                    <button id="player-mute-button" class="p-2 text-neutral-400 hover:text-accent-link transition">
+                        <svg id="player-icon-muted" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.925h-.114m.024 12.083h-.024M10.5 7.75v8.5a.75.75 0 0 0 1.5 0v-8.5a.75.75 0 0 0-1.5 0ZM7.5 10.75v2.5a.75.75 0 0 0 1.5 0v-2.5a.75.75 0 0 0-1.5 0ZM4.5 13.75v-5.5a.75.75 0 0 0-1.5 0v5.5a.75.75 0 0 0 1.5 0ZM17.25 10.5l-2.25 2.25m0 0l2.25 2.25M15 12.75l-4.5-4.5m4.5 4.5L10.5 15" />
+                        </svg>
+                        <svg id="player-icon-unmuted" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.925a.5.5 0 0 0-.5.5v11.15a.5.5 0 0 0 .5.5c1.674 0 3.12-1.79 3.12-6.075s-1.446-6.075-3.12-6.075Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.125L4.5 9v6.75l7.5 4.875a1.5 1.5 0 0 0 2.25-1.294V5.419a1.5 1.5 0 0 0-2.25-1.294Z" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="flex items-center space-x-2 w-24">
+                    <svg class="w-4 h-4 text-neutral-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.925a.5.5 0 0 0-.5.5v11.15a.5.5 0 0 0 .5.5c1.674 0 3.12-1.79 3.12-6.075s-1.446-6.075-3.12-6.075Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.125L4.5 9v6.75l7.5 4.875a1.5 1.5 0 0 0 2.25-1.294V5.419a1.5 1.5 0 0 0-2.25-1.294Z" />
+                    </svg>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" class="w-full appearance-none cursor-pointer">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="relative w-full max-w-5xl mx-4 my-8 p-6 lg:p-10 bg-dark-surface shadow-2xl rounded-xl">
+        
+        <header class="text-center pt-8 pb-10">
+            <h1 class="text-white text-4xl font-extrabold tracking-wider uppercase mb-4">meow</h1>
+            
+            <div class="flex justify-center items-center mb-4">
+                
+                <img 
+                    src="https://i.imgur.com/CzDo6CC.gif" 
+                    alt="Side Image 1" 
+                    class="w-[100px] h-[75px] object-cover rounded-lg shadow-md mr-4 md:mr-6"
+                >
+
+                <div class="inline-block relative">
+                    <a href="https://archived.moe/i/thread/514802/">
+                        <img 
+                            src="https://i.imgur.com/qinBejL.png" 
+                            onerror="this.onerror=null;this.src='https://placehold.co/128x128/fecaca/9f1239?text=IMG';" 
+                            alt="Profile Picture" 
+                            class="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full shadow-lg relative z-10"
+                        >
+                    </a>
+                </div>
+                
+                <img 
+                    src="https://i.imgur.com/CzDo6CC.gif" 
+                    alt="Side Image 2" 
+                    class="w-[100px] h-[75px] object-cover rounded-lg shadow-md ml-4 md:ml-6"
+                >
+
+            </div>
+        </header>
+
+        <main class="border border-neutral-700 rounded-lg overflow-hidden mb-10">
+            
+            <div class="grid md:grid-cols-2 text-sm font-semibold text-neutral-200 bg-dark-header">
+                <div class="p-4 text-center border-b md:border-b-0 md:border-r border-neutral-700">Socials</div>
+                <div class="p-4 text-center">Games</div>
+            </div>
+
+            <div class="grid md:grid-cols-2 text-sm text-neutral-400">
+                
+                <div class="flex flex-col border-b md:border-b-0 md:border-r border-neutral-700 divide-y divide-neutral-700">
+                    <div class="flex justify-between p-4">
+                        <span class="font-medium text-neutral-300">Discord</span>
+                        <a href="https://discordapp.com/users/92550243345780736" class="text-accent-link hover:text-red-500 transition">syko.ne</a>
+                    </div>
+                    <div class="flex justify-between p-4">
+                        <span class="font-medium text-neutral-300">Lastfm</span>
+                        <a href="https://last.fm/user/M4suu" target="_blank" class="text-accent-link hover:text-red-500 transition">M4suu</a>
+                    </div>
+                    <div class="flex justify-between p-4">
+                        <span class="font-medium text-neutral-300">Signal</span>
+                        <a href="https://signal.me/#eu/cgTqN334QoU-TXa35FPTJL7Dz1iBy6io5aWskjfHRzA7XWSwrHdN7aDFz4gXs6gY" target="_blank" class="text-accent-link hover:text-red-500 transition">delusionalism.69</a>
+                    </div>
+                    <div class="flex justify-between p-4">
+                        <span class="font-medium text-neutral-300">Line</span>
+                        <a href="https://line.me/ti/p/teFfoTi_qz" target="_blank" class="text-accent-link hover:text-red-500 transition">.delusionalism</a>
+                    </div>
+                </div>
+
+                <div class="flex flex-col divide-y divide-neutral-700">
+                    <div class="flex justify-between p-4">
+                        <span class="font-medium text-neutral-300">GBF</span>
+                        <a href="https://game.granbluefantasy.jp/#profile/16638355" target="_blank" class="text-accent-link hover:text-red-500 transition">16638355</a>
+                    </div>
+                    <div class="flex justify-between p-4">
+                        <span class="font-medium text-neutral-300">BDO Asia</span>
+                        <a href="https://blackdesert.pearlabyss.com/Asia/en-us/Game/Profile/Adventure?_target=ZCyZbFxP3UChmiY3BPi1tJzvG%2b%2f7%2b4yt80jHHvxzAK4%2boKtGC8OtIFzrKQmheNG%2fSxc5PT5R14L8%2bxsVSxzdo%2fWi1Xd1Vs%2fucb%2fWgXn5UIcHR2A%2bundrQHw5wGN%2fIAwfpISNJ2oQQgC%2fTj4a4vgyqx3%2f7UCK901ivDZmgwv0zxRVwYvWH%2fetgI%2bK%2bcnCNOgy" target="_blank" class="text-accent-link hover:text-red-500 transition">่่Syko</a>
+                    </div>
+                    <div class="flex justify-between p-4">
+                        <span class="font-medium text-neutral-300">UMA</span>
+                        <span class="text-accent-link">83967336719</span>
+                    </div>
+                    <div class="flex justify-between p-4">
+                        <span class="font-medium text-neutral-300">UMA 🇯🇵</span>
+                        <span class="text-accent-link">413727159</span>
+                    </div>
+                </div>
+
+            </div>
+            
+        </main>
+
+        <section class="mt-8 text-center">
+            <a href="https://www.youtube.com/watch?v=bzlHPlq8hIs" target="_blank" rel="noopener noreferrer" class="block w-full max-w-[840px] mx-auto mb-6">
+                <img 
+                    src="https://i.imgur.com/OMcFiRq.gif" 
+                    alt="Sis Puella Magica Banner" 
+                    class="w-full object-cover rounded-lg shadow-lg"
+                >
+            </a>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="relative h-[240px] w-full max-w-[420px] mx-auto">
+                    <img src="https://i.gifer.com/FHG9.gif" alt="Image 1" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                </div>
+                <div class="relative h-[240px] w-full max-w-[420px] mx-auto">
+                    <img src="https://i.pinimg.com/originals/d6/04/0e/d6040e3f663e9432b2d6c47a2d56bf42.gif" alt="Image 2" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                </div>
+            </div>
+
+            <div class="relative h-[240px] w-full max-w-[420px] mx-auto mb-4">
+                <img src="https://giffiles.alphacoders.com/349/34921.gif" alt="Image 3" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="relative h-[240px] w-full max-w-[420px] mx-auto">
+                    <img src="https://i.gifer.com/JNbe.gif" alt="Image 4" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                </div>
+                <div class="relative h-[240px] w-full max-w-[420px] mx-auto">
+                    <img src="https://i.pinimg.com/originals/d9/3d/e0/d93de0ce9d2146beb11bc473f2dc183e.gif" alt="Image 5" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                </div>
+            </div>
+
+            <div class="relative h-[240px] w-full max-w-[420px] mx-auto mb-4">
+                <img src="https://giffiles.alphacoders.com/157/157339.gif" alt="Image 6" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+            </div>
+        </section>
+        
+        <footer class="text-center pt-8 text-neutral-600 text-xs">
+            &copy; meow mrrrp nya miau purr mrrrp mew >^.^<
+        </footer>
+    </div>
+
+    <audio id="audio-player" loop></audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+           
+            const playlist = [
+                { 
+                    src: "https://archive.org/download/SisPuellaMagicaVocalsOrchestraOriginalVer.MadokaMagica/%E2%98%85%20Sis%20Puella%20Magica%21%20%28Vocals%2C%20Orchestra%29%20original%20ver.%20-%20Madoka%20Magica.mp3", 
+                    title: "Sis Puella Magica!" 
+                },
+                { 
+                    src: "https://archive.org/download/yuki-kajiura-discography/Yuki%20Kajiura%20-%20Discography%20%281993-2013%29.iso/2011%2F2011.05.25%20-%20Puella%20Magi%20Madoka%20Magica%20Original%20Soundtrack%20Vol.1%2F07%20-%20Conturbatio.mp3", 
+                    title: "Conturbatio" 
+                },
+                { 
+                    src: "https://archive.org/download/yuki-kajiura-discography/Yuki%20Kajiura%20-%20Discography%20%281993-2013%29.iso/2011%2F2011.05.25%20-%20Puella%20Magi%20Madoka%20Magica%20Original%20Soundtrack%20Vol.1%2F06%20-%20Desiderium.mp3", 
+                    title: "Desiderium" 
+                },
+                { 
+                    src: "https://archive.org/download/yuki-kajiura-discography/Yuki%20Kajiura%20-%20Discography%20%281993-2013%29.iso/2011%2F2011.05.25%20-%20Puella%20Magi%20Madoka%20Magica%20Original%20Soundtrack%20Vol.1%2F04%20-%20Credens%20justitiam.mp3", 
+                    title: "Credens Justitiam" 
+                }
+            ];
+            let currentTrackIndex = 0;
+            
+            
+            const audioPlayer = document.getElementById('audio-player');
+            const playPauseButton = document.getElementById('play-pause-button');
+            const playerMuteButton = document.getElementById('player-mute-button');
+            const volumeSlider = document.getElementById('volume-slider');
+            
+            const iconPlay = document.getElementById('icon-play');
+            const iconPause = document.getElementById('icon-pause');
+            const iconMuted = document.getElementById('player-icon-muted');
+            const iconUnmuted = document.getElementById('player-icon-unmuted');
+            const progressBar = document.getElementById('progress-bar');
+            const currentTimeDisplay = document.getElementById('current-time');
+            const totalDurationDisplay = document.getElementById('total-duration');
+            
+            const minimizeButton = document.getElementById('minimize-button');
+            const closeButton = document.getElementById('close-button');
+            const playerBox = document.getElementById('audio-controls-box');
+
+            
+            const trackTitleDisplay = document.getElementById('track-title');
+            const nextTrackButton = document.getElementById('next-track-button');
+            const previousTrackButton = document.getElementById('previous-track-button');
+
+            let isDragging = false;
+            let lastVolume = 0.05;
+
+            if (!audioPlayer || !playPauseButton || !playerMuteButton || !minimizeButton || !playerBox || !volumeSlider || !trackTitleDisplay || !nextTrackButton || !previousTrackButton) return;
+
+            function formatTime(seconds) {
+                if (isNaN(seconds)) return "00:00";
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+
+            function updatePlaybackIcon(isPlaying) {
+                if (isPlaying) {
+                    iconPlay.classList.add('hidden');
+                    iconPause.classList.remove('hidden');
+                } else {
+                    iconPlay.classList.remove('hidden');
+                    iconPause.classList.add('hidden');
+                }
+            }
+
+            function updateMuteIcon(isMuted) {
+                if (isMuted) {
+                    iconMuted.classList.remove('hidden');
+                    iconUnmuted.classList.add('hidden');
+                } else {
+                    iconMuted.classList.add('hidden');
+                    iconUnmuted.classList.remove('hidden');
+                }
+            }
+            
+            function togglePlayerVisibility(showPlayer) {
+                if (showPlayer) {
+                    playerBox.classList.remove('hidden');
+                    minimizeButton.classList.add('hidden');
+                } else {
+                    playerBox.classList.add('hidden');
+                    minimizeButton.classList.remove('hidden');
+                }
+            }
+            
+            function loadTrack(index, shouldPlay = false) {
+                
+                currentTrackIndex = (index + playlist.length) % playlist.length; 
+                
+                const track = playlist[currentTrackIndex];
+                
+                const wasPlaying = !audioPlayer.paused;
+                
+                if (audioPlayer.src !== track.src) {
+                    audioPlayer.src = track.src;
+                    audioPlayer.load(); 
+                }
+
+                trackTitleDisplay.textContent = `${track.title}`;
+
+                if (shouldPlay || wasPlaying) {
+                    audioPlayer.play().catch(error => {
+                        console.error("Playback was blocked on load:", error);
+                        updatePlaybackIcon(false);
+                    });
+                }
+            }
+
+            function playNext() {
+                loadTrack(currentTrackIndex + 1, true);
+            }
+
+            function playPrevious() {
+                loadTrack(currentTrackIndex - 1, true);
+            }
+
+            
+            audioPlayer.muted = false; 
+            audioPlayer.volume = 0.05; 
+            updateMuteIcon(false); 
+            updatePlaybackIcon(false); 
+            volumeSlider.value = 0.05; 
+            lastVolume = 0.05; 
+            
+            loadTrack(currentTrackIndex); 
+            
+
+
+            
+            audioPlayer.addEventListener('error', () => {
+                console.error("Error loading audio. The source might be broken or inaccessible.");
+                totalDurationDisplay.textContent = "Error";
+                progressBar.disabled = true;
+                playPauseButton.disabled = true;
+            });
+
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                const duration = audioPlayer.duration;
+                totalDurationDisplay.textContent = formatTime(duration);
+                progressBar.max = duration;
+                progressBar.min = 0; 
+                progressBar.step = 0.1; 
+            });
+            
+            audioPlayer.addEventListener('play', () => updatePlaybackIcon(true));
+            audioPlayer.addEventListener('pause', () => updatePlaybackIcon(false));
+            
+            
+            audioPlayer.addEventListener('ended', () => {
+                playNext(); 
+            });
+
+
+            minimizeButton.addEventListener('click', () => {
+                togglePlayerVisibility(true);
+            });
+
+            closeButton.addEventListener('click', () => {
+                audioPlayer.pause();
+                togglePlayerVisibility(false);
+            });
+
+            playPauseButton.addEventListener('click', () => {
+                if (audioPlayer.paused) {
+                    audioPlayer.play().catch(error => {
+                        console.error("Playback was blocked:", error);
+                    });
+                } else {
+                    audioPlayer.pause();
+                }
+            });
+            
+            
+            nextTrackButton.addEventListener('click', playNext);
+            previousTrackButton.addEventListener('click', playPrevious);
+
+
+            playerMuteButton.addEventListener('click', () => {
+                audioPlayer.muted = !audioPlayer.muted;
+                updateMuteIcon(audioPlayer.muted);
+                
+                if (audioPlayer.muted) {
+                    
+                    lastVolume = audioPlayer.volume > 0 ? audioPlayer.volume : lastVolume;
+                    volumeSlider.value = 0;
+                } else {
+                    
+                    audioPlayer.volume = lastVolume > 0 ? lastVolume : 0.2;
+                    volumeSlider.value = audioPlayer.volume;
+                    
+                    if (audioPlayer.paused) {
+                        audioPlayer.play().catch(error => {
+                            console.error("Play failed after interaction:", error);
+                        });
+                    }
+                }
+            });
+
+            volumeSlider.addEventListener('input', () => {
+                const newVolume = parseFloat(volumeSlider.value);
+                audioPlayer.volume = newVolume;
+                
+                if (newVolume > 0) {
+                    audioPlayer.muted = false;
+                    lastVolume = newVolume;
+                    updateMuteIcon(false);
+                } else {
+                    audioPlayer.muted = true;
+                    updateMuteIcon(true);
+                }
+            });
+            
+            audioPlayer.addEventListener('volumechange', () => {
+                
+                if (!audioPlayer.muted) {
+                    volumeSlider.value = audioPlayer.volume;
+                    lastVolume = audioPlayer.volume;
+                }
+                updateMuteIcon(audioPlayer.muted);
+            });
+
+            audioPlayer.addEventListener('timeupdate', () => {
+                if (!isDragging) {
+                    progressBar.value = audioPlayer.currentTime;
+                    currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+                }
+            });
+
+            progressBar.addEventListener('mousedown', () => isDragging = true);
+            progressBar.addEventListener('mouseup', () => isDragging = false);
+
+            progressBar.addEventListener('input', () => {
+                currentTimeDisplay.textContent = formatTime(progressBar.value);
+            });
+
+            progressBar.addEventListener('change', () => {
+                audioPlayer.currentTime = progressBar.value;
+                isDragging = false;
+                
+                if (audioPlayer.paused) {
+                    audioPlayer.play().catch(error => {
+                        console.error("Play failed after seeking:", error);
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
