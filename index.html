@@ -11,6 +11,7 @@
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
@@ -73,6 +74,10 @@
     </script>
 </head>
 <body class="bg-dark-body">
+
+    <div class="hidden md:block fixed top-4 right-4 z-50 text-white text-lg font-bold">
+        ／人◕ ‿‿ ◕人＼
+    </div>
 
     <div id="player-container" class="fixed top-4 left-4 z-50">
         
@@ -152,8 +157,8 @@
                 
                 <img 
                     src="https://i.imgur.com/CzDo6CC.gif" 
-                    alt="Side Image 1" 
-                    class="w-[100px] h-[75px]"
+                    alt=":3" 
+                    class="hidden md:block w-[100px] h-[75px]"
                 >
 
                 <div class="inline-block relative">
@@ -161,7 +166,7 @@
                         <img 
                             src="https://i.imgur.com/qinBejL.png" 
                             onerror="this.onerror=null;this.src='https://placehold.co/128x128/fecaca/9f1239?text=IMG';" 
-                            alt="Profile Picture" 
+                            alt=":3" 
                             class="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full shadow-lg relative z-10"
                         >
                     </a>
@@ -169,97 +174,101 @@
                 
                 <img 
                     src="https://i.imgur.com/CzDo6CC.gif" 
-                    alt="Side Image 2" 
-                    class="w-[100px] h-[75px]"
+                    alt=":3" 
+                    class="hidden md:block w-[100px] h-[75px]"
                 >
 
             </div>
         </header>
 
         <main class="border border-neutral-700 rounded-lg overflow-hidden mb-10">
+    
+    <div class="grid md:grid-cols-2 text-sm font-semibold text-neutral-200 bg-dark-header">
+        <div class="p-4 text-center border-b md:border-b-0 md:border-r border-neutral-700 hidden md:block">Socials</div>
+        <div class="p-4 text-center hidden md:block">Games</div>
+    </div>
+
+    <div class="flex flex-col md:grid md:grid-cols-2 text-sm text-neutral-400">
+        
+        <div class="flex flex-col border-b md:border-b-0 md:border-r border-neutral-700 divide-y divide-neutral-700">
+            <div class="md:hidden p-2 text-center text-xs font-bold text-white bg-dark-header border-b border-neutral-700">Socials</div>
             
-            <div class="grid md:grid-cols-2 text-sm font-semibold text-neutral-200 bg-dark-header">
-                <div class="p-4 text-center border-b md:border-b-0 md:border-r border-neutral-700">Socials</div>
-                <div class="p-4 text-center">Games</div>
+            <div class="flex justify-between p-4">
+                <span class="font-medium text-neutral-300">Discord</span>
+                <a href="https://discordapp.com/users/92550243345780736" class="text-accent-link hover:text-red-500 transition">syko.ne</a>
             </div>
-
-            <div class="grid md:grid-cols-2 text-sm text-neutral-400">
-                
-                <div class="flex flex-col border-b md:border-b-0 md:border-r border-neutral-700 divide-y divide-neutral-700">
-                    <div class="flex justify-between p-4">
-                        <span class="font-medium text-neutral-300">Discord</span>
-                        <a href="https://discordapp.com/users/92550243345780736" class="text-accent-link hover:text-red-500 transition">syko.ne</a>
-                    </div>
-                    <div class="flex justify-between p-4">
-                        <span class="font-medium text-neutral-300">Lastfm</span>
-                        <a href="https://last.fm/user/M4suu" target="_blank" class="text-accent-link hover:text-red-500 transition">M4suu</a>
-                    </div>
-                    <div class="flex justify-between p-4">
-                        <span class="font-medium text-neutral-300">Signal</span>
-                        <a href="https://signal.me/#eu/cgTqN334QoU-TXa35FPTJL7Dz1iBy6io5aWskjfHRzA7XWSwrHdN7aDFz4gXs6gY" target="_blank" class="text-accent-link hover:text-red-500 transition">delusionalism.69</a>
-                    </div>
-                    <div class="flex justify-between p-4">
-                        <span class="font-medium text-neutral-300">Line</span>
-                        <a href="https://line.me/ti/p/teFfoTi_qz" target="_blank" class="text-accent-link hover:text-red-500 transition">.delusionalism</a>
-                    </div>
-                </div>
-
-                <div class="flex flex-col divide-y divide-neutral-700">
-                    <div class="flex justify-between p-4">
-                        <span class="font-medium text-neutral-300">GBF</span>
-                        <a href="https://game.granbluefantasy.jp/#profile/16638355" target="_blank" class="text-accent-link hover:text-red-500 transition">16638355</a>
-                    </div>
-                    <div class="flex justify-between p-4">
-                        <span class="font-medium text-neutral-300">BDO Asia</span>
-                        <a href="https://blackdesert.pearlabyss.com/Asia/en-us/Game/Profile/Adventure?_target=ZCyZbFxP3UChmiY3BPi1tJzvG%2b%2f7%2b4yt80jHHvxzAK4%2boKtGC8OtIFzrKQmheNG%2fSxc5PT5R14L8%2bxsVSxzdo%2fWi1Xd1Vs%2fucb%2fWgXn5UIcHR2A%2bundrQHw5wGN%2fIAwfpISNJ2oQQgC%2fTj4a4vgyqx3%2f7UCK901ivDZmgwv0zxRVwYvWH%2fetgI%2bK%2bcnCNOgy" target="_blank" class="text-accent-link hover:text-red-500 transition">่่Syko</a>
-                    </div>
-                    <div class="flex justify-between p-4">
-                        <span class="font-medium text-neutral-300">UMA</span>
-                        <span class="text-accent-link">83967336719</span>
-                    </div>
-                    <div class="flex justify-between p-4">
-                        <span class="font-medium text-neutral-300">UMA 🇯🇵</span>
-                        <span class="text-accent-link">413727159</span>
-                    </div>
-                </div>
-
+            <div class="flex justify-between p-4">
+                <span class="font-medium text-neutral-300">Lastfm</span>
+                <a href="https://last.fm/user/M4suu" target="_blank" class="text-accent-link hover:text-red-500 transition">M4suu</a>
             </div>
-            
-        </main>
+            <div class="flex justify-between p-4">
+                <span class="font-medium text-neutral-300">Signal</span>
+                <a href="https://signal.me/#eu/cgTqN334QoU-TXa35FPTJL7Dz1iBy6io5aWskjfHRzA7XWSwrHdN7aDFz4gXs6gY" target="_blank" class="text-accent-link hover:text-red-500 transition">delusionalism.69</a>
+            </div>
+            <div class="flex justify-between p-4">
+                <span class="font-medium text-neutral-300">Line</span>
+                <a href="https://line.me/ti/p/teFfoTi_qz" target="_blank" class="text-accent-link hover:text-red-500 transition">.delusionalism</a>
+            </div>
+        </div>
+
+        <div class="flex flex-col divide-y divide-neutral-700">
+            <div class="md:hidden p-2 text-center text-xs font-bold text-white bg-dark-header border-b border-neutral-700">Games</div>
+
+            <div class="flex justify-between p-4">
+                <span class="font-medium text-neutral-300">GBF</span>
+                <a href="https://game.granbluefantasy.jp/#profile/16638355" target="_blank" class="text-accent-link hover:text-red-500 transition">16638355</a>
+            </div>
+            <div class="flex justify-between p-4">
+                <span class="font-medium text-neutral-300">BDO Asia</span>
+                <a href="https://blackdesert.pearlabyss.com/Asia/en-us/Game/Profile/Adventure?_target=ZCyZbFxP3UChmiY3BPi1tJzvG%2b%2f7%2b4yt80jHHvxzAK4%2boKtGC8OtIFzrKQmheNG%2fSxc5PT5R14L8%2bxsVSxzdo%2fWi1Xd1Vs%2fucb%2fWgXn5UIcHR2A%2bundrQHw5wGN%2fIAwfpISNJ2oQQgC%2fTj4a4vgyqx3%2f7UCK901ivDZmgwv0zxRVwYvWH%2fetgI%2bK%2bcnCNOgy" target="_blank" class="text-accent-link hover:text-red-500 transition">่่Syko</a>
+            </div>
+            <div class="flex justify-between p-4">
+                <span class="font-medium text-neutral-300">UMA</span>
+                <span class="text-accent-link">83967336719</span>
+            </div>
+            <div class="flex justify-between p-4">
+                <span class="font-medium text-neutral-300">UMA 🇯🇵</span>
+                <span class="text-accent-link">413727159</span>
+            </div>
+        </div>
+
+    </div>
+    
+</main>
 
         <section class="mt-8 text-center">
             <a href="https://www.youtube.com/watch?v=bzlHPlq8hIs" target="_blank" rel="noopener noreferrer" class="block w-full max-w-[840px] mx-auto mb-6">
                 <img 
                     src="https://i.imgur.com/OMcFiRq.gif" 
-                    alt="Sis Puella Magica Banner" 
+                    alt="become meguca!" 
                     class="w-full object-cover rounded-lg shadow-lg"
                 >
             </a>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div class="relative h-[240px] w-full max-w-[420px] mx-auto">
-                    <img src="https://i.gifer.com/FHG9.gif" alt="Image 1" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                    <img src="https://i.gifer.com/FHG9.gif" alt=":3" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
                 </div>
                 <div class="relative h-[240px] w-full max-w-[420px] mx-auto">
-                    <img src="https://i.pinimg.com/originals/d6/04/0e/d6040e3f663e9432b2d6c47a2d56bf42.gif" alt="Image 2" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                    <img src="https://i.pinimg.com/originals/d6/04/0e/d6040e3f663e9432b2d6c47a2d56bf42.gif" alt=":3" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
                 </div>
             </div>
 
             <div class="relative h-[240px] w-full max-w-[420px] mx-auto mb-4">
-                <img src="https://giffiles.alphacoders.com/349/34921.gif" alt="Image 3" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                <img src="https://giffiles.alphacoders.com/349/34921.gif" alt=":3" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div class="relative h-[240px] w-full max-w-[420px] mx-auto">
-                    <img src="https://i.gifer.com/JNbe.gif" alt="Image 4" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                    <img src="https://i.gifer.com/JNbe.gif" alt=":3" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
                 </div>
                 <div class="relative h-[240px] w-full max-w-[420px] mx-auto">
-                    <img src="https://i.pinimg.com/originals/d9/3d/e0/d93de0ce9d2146beb11bc473f2dc183e.gif" alt="Image 5" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                    <img src="https://i.pinimg.com/originals/d9/3d/e0/d93de0ce9d2146beb11bc473f2dc183e.gif" alt=":3" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
                 </div>
             </div>
 
             <div class="relative h-[240px] w-full max-w-[420px] mx-auto mb-4">
-                <img src="https://giffiles.alphacoders.com/157/157339.gif" alt="Image 6" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
+                <img src="https://giffiles.alphacoders.com/157/157339.gif" alt=":3" class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md">
             </div>
         </section>
         
@@ -523,5 +532,4 @@
     </script>
 
 </body>
-
 </html>
